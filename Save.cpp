@@ -76,8 +76,18 @@ void SaveGameWithFileName() {
 			
 			countError--;
 		} while (countError > 0);
+		char key = _getch();
+if (key == 'k') {
+	xoagame();  
+}
 		RecoveryBoard();
-		
+		int countX, countO;
+countXO(countX, countO);
+_TURN = (countX <= countO); // Nếu số lượng X <= O, thì lượt chơi là của X
+if (_TURN == 1) DrawX(89 + 2, 17);
+else DrawO(89 + 2, 17);
+			GotoXY(_X, _Y);
+
 		return;
 	}
 
