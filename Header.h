@@ -22,6 +22,7 @@ extern int scoreP1;
 extern int scoreP2;
 extern std::string player1;
 extern std::string player2;
+extern bool InputActive;
 
 void about();
 void Setting();
@@ -29,7 +30,7 @@ int mainmenu();
 void showloadgame();
 void drawcaro();
 void displayMenu2(int selected);
-void mainmenu2();
+
 
 void clearScreen();
 void FixConsoleWindow();

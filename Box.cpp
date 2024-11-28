@@ -6,47 +6,7 @@
 
 using namespace std;
 
-void DrawBoard(int pSize) {
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hStdOut, (15 << 4) | 1);
-	SetConsoleOutputCP(CP_UTF8);
-	for (int i = 0;i <= pSize - 1;i++) {
-		for (int j = 0;j <= pSize - 1;j++) {
-			GotoXY(LEFT, TOP + 2 * j);
-			cout << u8"╠";
 
-			//
-			GotoXY(LEFT + 5 * i, TOP + 2 * j);
-			cout << u8"╬════";
-			GotoXY(LEFT + 5 * i, TOP);
-			cout << u8"╦════";
-			GotoXY(LEFT + 5 * i + 5, TOP + 2 * j);
-			cout << u8"╣";
-			GotoXY(LEFT + 5 * (i)+5, TOP + 2 * j + 1);
-			cout << u8"║ ";
-			GotoXY(LEFT + 5 * (i), TOP + 2 * j + 1);
-			cout << u8"║ ";
-			//dong cuoi
-			GotoXY(LEFT + 5 * i, TOP + 2 * j + 2);
-			cout << u8"╬════";
-			GotoXY(LEFT + 5 * i + 5, TOP + 2 * j + 2);
-			cout << u8"╣";
-			GotoXY(LEFT + 5 * pSize, TOP);
-			cout << u8"╗";
-			GotoXY(LEFT + 5 * i, TOP + 2 * pSize);
-			cout << u8"╩════";
-			//goc tren
-			GotoXY(LEFT, TOP);
-			cout << u8"╔";
-			//goc duoi
-			GotoXY(LEFT + 5 * pSize, TOP + 2 * pSize);
-			cout << u8"╝";
-			GotoXY(LEFT, TOP + 2 * pSize);
-			cout << u8"╚";
-
-		}
-	}
-}
 
 
 void Box1() {
@@ -59,7 +19,6 @@ void Box1() {
 	//cot doc trai
 	GotoXY(LEFT + 69, TOP + 3);
 	cout << u8"│ ";// cot giua
-
 	GotoXY(LEFT + 69, TOP + 2);
 	cout << u8"┌";
 	GotoXY(LEFT + 69, TOP + 4);
@@ -74,14 +33,12 @@ void Box1() {
 	//duoi cung
 	GotoXY(LEFT + 70, TOP + 4);
 	for (int i = 0;i < 20;i++) cout << u8"─";
-
 	//box p2
 	GotoXY(LEFT + 70, TOP + 5);
 	for (int i = 0;i < 20;i++) cout << u8"─";
 	//cot doc trai
 	GotoXY(LEFT + 69, TOP + 6);
 	cout << u8"│";//cot giua
-
 	GotoXY(LEFT + 69, TOP + 5);
 	cout << u8"┌";
 	GotoXY(LEFT + 69, TOP + 7);
@@ -96,7 +53,6 @@ void Box1() {
 	//duoi cung
 	GotoXY(LEFT + 70, TOP + 7);
 	for (int i = 0;i < 20;i++) cout << u8"─";
-
 	SetConsoleTextAttribute(hStdOut, (15 << 4) | 0);
 	GotoXY(LEFT + 70, TOP + 6);
 	cout << player2 << "(O)";

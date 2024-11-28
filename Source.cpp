@@ -8,7 +8,8 @@
 #include <Windows.h>
 #include"Timer.h"
 #include <iomanip>
-#include <thread>
+#include <thread>//de chay timer
+
 
 using namespace std;
 
@@ -20,12 +21,14 @@ using namespace std;
  _POINT pastcoord; // Định nghĩa biến
  _POINT _A[BOARD_SIZE + 1][BOARD_SIZE + 1];
 
-  int _B[BOARD_SIZE + 1][BOARD_SIZE + 1];
-  bool _TURN;
-  int _COMMAND;
+ int _B[BOARD_SIZE + 1][BOARD_SIZE + 1];
+ bool _TURN;
+ int _COMMAND;
  int _X, _Y;
  int scoreP1 = 0;
+
  int scoreP2 = 0;
+ bool InputActive = true;
 
 
 
@@ -35,10 +38,13 @@ int mainmenu()
 	int choice = 0;
 	char key;
 	DrawBg_xp();
-	nhan:drawcaro();
-	DrawCaro();
+	
+	
+	drawcaro();
+	GotoXY(0, 0);
 	while (true) {
-		GotoXY(0, 17);
+		
+		
 		displayMenu(choice);
 		key = _getch(); // Nhận đầu vào từ bàn phím mà không cần nhấn Enter
 
@@ -57,32 +63,81 @@ int mainmenu()
 			case 0:
 				
 				startGame();
-				goto nhan;
+				drawcaro();
+				
 				break;
 			case 1:
 				showInstructions();
-				goto nhan;
+				drawcaro();
+				
 				break;
 			case 2:
 				about();
-				goto nhan;
+				drawcaro();
+				
 				break;
 			case 3:
 				LoadGameWithFileName();
-				goto nhan;
+				drawcaro();
+				
 				break;
 			case 4:
 				Setting();
-				goto nhan;
+				drawcaro();
+				
 				break;
 			case 5:
 				system("cls");
 				cout << "Cam on da choi! Tam biet!\n";
-				return 0;
+				ExitProcess(1);
+				
+				break;
 			}
 		}
 	}
 	return 0;
+}
+
+void DrawBoard(int pSize) {
+	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hStdOut, (15 << 4) | 1);
+	SetConsoleOutputCP(CP_UTF8);
+	for (int i = 0;i <= pSize - 1;i++) {
+		for (int j = 0;j <= pSize - 1;j++) {
+			GotoXY(LEFT, TOP + 2 * j);
+			cout << u8"╠";
+
+			//
+			GotoXY(LEFT + 5 * i, TOP + 2 * j);
+			cout << u8"╬════";
+			GotoXY(LEFT + 5 * i, TOP);
+			cout << u8"╦════";
+			GotoXY(LEFT + 5 * i + 5, TOP + 2 * j);
+			cout << u8"╣";
+			GotoXY(LEFT + 5 * (i)+5, TOP + 2 * j + 1);
+			cout << u8"║ ";
+			GotoXY(LEFT + 5 * (i), TOP + 2 * j + 1);
+			cout << u8"║ ";
+			//dong cuoi
+			GotoXY(LEFT + 5 * i, TOP + 2 * j + 2);
+			cout << u8"╬════";
+			GotoXY(LEFT + 5 * i + 5, TOP + 2 * j + 2);
+			cout << u8"╣";
+			GotoXY(LEFT + 5 * pSize, TOP);
+			cout << u8"╗";
+			GotoXY(LEFT + 5 * i, TOP + 2 * pSize);
+			cout << u8"╩════";
+			//goc tren
+			GotoXY(LEFT, TOP);
+			cout << u8"╔";
+			//goc duoi
+			GotoXY(LEFT + 5 * pSize, TOP + 2 * pSize);
+			cout << u8"╝";
+			GotoXY(LEFT, TOP + 2 * pSize);
+			cout << u8"╚";
+
+		}
+	}
 }
 
 void clearScreen() {
@@ -126,7 +181,7 @@ void ResetData() {
 void StartGame() {
 	ResetKetqua(_B);
 	system("cls");
-	if (scoreP1 == 0 && scoreP2 == 0) InputPlayerNames();
+	
 	system("cls");
 	ResetData();
 	DrawBoard(BOARD_SIZE);
@@ -223,7 +278,6 @@ int checkHoa(int a[BOARD_SIZE+1][BOARD_SIZE+1]) {
 			if (a[1 + i ][ 1 +  j] == 1 || a[1 + i ][1+ j] == -1) {
 				countSL += 1;
 				GotoXY(0, _A[BOARD_SIZE - 1][BOARD_SIZE - 1].y + 5);//test vitri
-				cout << countSL;
 				if (countSL == BOARD_SIZE * BOARD_SIZE ) return 0;
 			}
 			else break;
@@ -246,19 +300,6 @@ int TestBoard() {
 	int startXcc = -1;//X bat dau khi xet cheo chinh
 	int startOcp = -1;
 	int startXcp = -1;//X bat dau khi xet cheo phu
-
-
-	//GotoXY(0, _A[BOARD_SIZE - 1][BOARD_SIZE - 1].y + 2);
-	//cout << "x:" << _B[_X/5 - 4][_Y/2] << " " << _B[_X/5 - 3][_Y/2] << " " << _B[_X/5 - 2][_Y/2]
-	//	<< " " << _B[_X/5 - 1][_Y/2] << " _" << _B[_X/5][_Y/2] << "_ " << _B[_X/5 + 1][_Y/2] << " "
-	//	<< _B[_X/5 + 2][_Y/2] << " " << _B[_X/5 + 3][_Y/2] << " " << _B[_X/5 + 4][_Y/2] << "                 ";
-	//
-	//GotoXY(0, _A[BOARD_SIZE - 1][BOARD_SIZE - 1].y + 4);
-	//cout << "y:" << _B[_X/5][_Y/2 - 4] << " " << _B[_X/5][_Y/2 - 3] << " " << _B[_X/5][_Y/2 - 2]
-	//	<< " " << _B[_X/5][_Y/2 - 1] << " _" << _B[_X/5][_Y/2] << "_ " << _B[_X/5][_Y/2 + 1] << " "
-	//
-	//	<< _B[_X/5][_Y/2 + 2] << " " << _B[_X/5][_Y/2 + 3] << " " << _B[_X/5][_Y/2 + 4] << "                 "; //check ket qua
-
 	if (checkHoa(_B) == 0) return 0;
 
 	//cheo phu
@@ -325,7 +366,6 @@ int TestBoard() {
 					GotoXY(_X - 20 + (startOcc + j) * 5, _Y - 8 + (startOcc + j) * 2);
 					SetColor(0, 14);
 					cout << " O ";
-
 				}
 				return 1;
 			}
@@ -386,7 +426,7 @@ int TestBoard() {
 				for (int j = 0; j < 5; j++) {
 					GotoXY(_X - 20 + (startXn + j) * 5, _Y);
 					SetColor(4, 14);
-					cout << " X ";
+					cout << "X";
 				}
 				return -1;
 			}
@@ -405,7 +445,7 @@ int TestBoard() {
 				for (int j = 0; j < 5; j++) {
 					GotoXY(_X - 20 + (startOn + j) * 5, _Y);
 					SetColor(0, 14);
-					cout << " O ";
+					cout << "O";
 				}
 				return 1;
 			}
@@ -475,18 +515,18 @@ int GetConsoleWidth() {
 void startGame() {
 
 	SetConsoleOutputCP(1251);
-	cout << "Bat dau tro choi...\n";
+
 
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hStdOut, FOREGROUND_BLUE | (15 << 4));
 
 	FixConsoleWindow();
-
-	int a, b;
+	if (InputActive = true) { InputPlayerNames(); }
+	
 	bool ValidEnter = true;
 	seconds = 15;
 	StartGame();
-	
+
 	Box1();
 	Box2();
 	Box3();
@@ -495,10 +535,10 @@ void startGame() {
 	GotoXY(LEFT + 2, TOP + 1);//dua con tro ve o dau tien
 	pastcoord.x = 0;
 	pastcoord.y = 0;
-	std::thread timerThread(TimerCountDown);
-	timerThread.detach();
+	
+	
 	while (1) {
-		
+
 		_COMMAND = toupper(_getch());
 		if (_COMMAND == 27 || _COMMAND == 'Q') {
 			countdownActive = false;
@@ -531,23 +571,23 @@ void startGame() {
 						ExitProcess(0);
 						break;
 					}
-					else if (choice == 1){
-						
+					else if (choice == 1) {
+
 						toggleSFX();
-						
-						
+
+
 						GotoXY(72, 4);
-						
+
 					}
 					else break;
-					
-				
+
+
 				}
 
 			}RecoveryBoard();
-		
+
 		}
-		
+
 		else {
 			if (_COMMAND == 'A') MoveLeft();
 			else if (_COMMAND == 'W') MoveUp();
@@ -570,16 +610,16 @@ void startGame() {
 				switch (CheckBoard(_X, _Y)) {
 				case -1:
 					step();
-					_B[_X/5][_Y/2] = -1;
+					_B[_X / 5][_Y / 2] = -1;
 					SetConsoleTextAttribute(hStdOut, 12 | (7 << 4));
 					cout << "X";
 					if (pastcoord.x != 0 && pastcoord.y != 0) {
-						if ((_B[_X/5][_Y/2]) == 1) {
+						if ((_B[_X / 5][_Y / 2]) == 1) {
 							GotoXY(pastcoord.x, pastcoord.y);
 							SetColor(12, 15);
 							cout << "X";
 						}
-						if ((_B[_X/5][_Y/2]) == -1) {
+						if ((_B[_X / 5][_Y / 2]) == -1) {
 							GotoXY(pastcoord.x, pastcoord.y);
 							SetColor(0, 15);
 							cout << "O";
@@ -596,16 +636,16 @@ void startGame() {
 					break;
 				case 1:
 					stepO();
-					_B[_X/5][_Y/2] = 1;
+					_B[_X / 5][_Y / 2] = 1;
 					SetConsoleTextAttribute(hStdOut, 0 | (7 << 4));
 					cout << "O";
 					if (pastcoord.x != 0 && pastcoord.y != 0) {
-						if ((_B[_X/5][_Y/2]) == 1) {
+						if ((_B[_X / 5][_Y / 2]) == 1) {
 							GotoXY(pastcoord.x, pastcoord.y);
 							SetColor(12, 15);
 							cout << "X";
 						}
-						if ((_B[_X/5][_Y/2]) == -1) {
+						if ((_B[_X / 5][_Y / 2]) == -1) {
 							GotoXY(pastcoord.x, pastcoord.y);
 							SetColor(0, 15);
 							cout << "O";
@@ -630,7 +670,7 @@ void startGame() {
 						case 0:
 							if (toupper(AskContinue()) != 'Y' && toupper(AskContinue()) != 13 || AskContinue() == 27) {
 								//system("pause");
-								Sleep(500);
+								//Sleep(500);
 								ResetKetqua(_B);
 								system("cls");
 								scoreP1 = 0;
@@ -645,36 +685,55 @@ void startGame() {
 							}
 						}
 					}
-					else {
-						switch (ProcessFinish(kq)) {
-						case-1:
-						case 1:
-						case 0:
-							if (toupper(AskContinue()) != 'Y' && toupper(AskContinue()) != 13 || AskContinue() == 27) {
-								//system("pause");
-								Sleep(500);
-								ResetKetqua(_B);
-								system("cls");
-								scoreP1 = 0;
-								scoreP2 = 0;
-								mainmenu();
-								return;
-							}
-							else {
-								countdownActive = true;
-								ResetKetqua(_B);
-								startGame();
-							}
-						}
-					}
-				
+
+
+
+
 				}
 				ValidEnter = true;
 			}
+		}if (seconds == 0) {
+			HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
+			DWORD prevMode;
+
+			// Lấy chế độ hiện tại
+			GetConsoleMode(hInput, &prevMode);
+
+			// Tắt chế độ ENABLE_PROCESSED_INPUT để ngăn nhận phím Enter
+			SetConsoleMode(hInput, prevMode & ~ENABLE_PROCESSED_INPUT);
 		}
 		
-	}
+		if (seconds == 0) {
+			if (pastcoord.x == 1) kq = -1;
+			if (pastcoord.x == -1) kq = 1;
+			if (pastcoord.x == 0) kq = 0;
+			cout << "abc";
+			switch (ProcessFinish(kq)) {
+			case-1:
+				cout << "1";
+			case 1:
+			case 0:
+				if (toupper(AskContinue()) != 'Y' && toupper(AskContinue()) != 13 || AskContinue() == 27) {
+					//system("pause");
+					Sleep(500);
+					ResetKetqua(_B);
+					system("cls");
+					scoreP1 = 0;
+					scoreP2 = 0;
+					mainmenu();
+					return;
+				}
+				else {
+					countdownActive = true;
+					ResetKetqua(_B);
+					startGame();
+				}
+			}
+		}
 
+
+	}
+	
 }
 
 
@@ -766,10 +825,6 @@ void displayMenu2(int selected) {
 
 
 
-}
-void mainmenu2()
-{
-	
 }
 
 

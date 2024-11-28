@@ -1,7 +1,7 @@
 ﻿#include "Header.h"
 #include "Save.h"
 
-int main() {
+void main() {
 	
 	//FixConsoleWindow();
 	CreateSaveDirectory();
@@ -10,5 +10,5 @@ int main() {
 	SaveToFile(filename, content);
 	
 	mainmenu();
-	return 0;
+	
 }

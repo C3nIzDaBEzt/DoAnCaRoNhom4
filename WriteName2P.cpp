@@ -89,7 +89,7 @@ void InputPlayerNames() {
 			Box_Error_SetName(75,8);
 			Sleep(800);
 			SetName_View();
-			GotoXY(3, 5);
+			GotoXY(4, 6);
 			cout << player1;
 			int count = 3;
 			while (count > 0) {
@@ -108,7 +108,7 @@ void InputPlayerNames() {
 			Box_Error_Duplicate_SetName();
 			Sleep(800);
 			SetName_View();
-			GotoXY(centerX + 5, 7);
+			GotoXY(4, 6);
 			cout << player1;
 			int count = 3; 
 			while (count > 0) {

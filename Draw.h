@@ -18,5 +18,15 @@ void DrawC(int x, int y);
 void DrawBG();
 void DrawBg_xp();
 void DrawPikachu(int a,int b);
-void DrawCaro();
+void DrawCaro(int x, int y);
+void DrawBG_Tim();
+void drawRule(int x, int y);
+void drawAbout(int x, int y);
+void drawLoadGame(int x, int y);
+void drawSetting(int x, int y);
+void DrawBg_Xanh();
+void DrawBg_Cam();
+void DrawBg_Hong();
+
+
 #endif ;
