@@ -65,6 +65,8 @@ void Box_Save_Complete();
 void Box_Error_SetName(int,int);
 void Box_Error_Duplicate_SetName();
 void Box_TimeCountdown_End();
+void Box_Error_Empty_File();
+void Box_Error_Duplicate_file();
 
 void displayMenu(int selected);
 void startGame();
