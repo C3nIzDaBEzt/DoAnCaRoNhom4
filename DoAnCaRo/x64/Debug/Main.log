@@ -1,9 +1,6 @@
-<<<<<<< HEAD
-﻿  Draw.cpp
-  Main.vcxproj -> E:\DoAnCaRoNhom4\x64\Debug\DoAnCaRo.exe
-=======
 ﻿  Save.cpp
-D:\git\Save.cpp(380,6): warning C4101: 'a': unreferenced local variable
-D:\git\Save.cpp(380,9): warning C4101: 'b': unreferenced local variable
-  Main.vcxproj -> D:\git\x64\Debug\DoAnCaRo.exe
->>>>>>> 1f34508c104f7a0d99a6b75c14496dc04f1b55a3
+E:\DoAnCaRoNhom4\Save.cpp(403,6): warning C4101: 'a': unreferenced local variable
+E:\DoAnCaRoNhom4\Save.cpp(403,9): warning C4101: 'b': unreferenced local variable
+  WriteName2P.cpp
+  Generating Code...
+  Main.vcxproj -> E:\DoAnCaRoNhom4\x64\Debug\DoAnCaRo.exe

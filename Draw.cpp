@@ -882,6 +882,7 @@ void DrawPikachu(int a,int b) {
 		std::cout << std::endl;
 	}
 
+
 	
 }
 void ve(int x, int y, int mina, int maxa, int minb, int maxb, int mang[][100]) {
