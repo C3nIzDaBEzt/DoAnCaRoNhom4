@@ -681,6 +681,7 @@ void startGame() {
 							else {
 								countdownActive = true;
 								ResetKetqua(_B);
+								InputActive = false;
 								startGame();
 							}
 						}

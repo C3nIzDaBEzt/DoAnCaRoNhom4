@@ -51,40 +51,61 @@ string getInputWithEscCheck_Save() {
 	}
 	return input;
 }
+<<<<<<< HEAD
 
 void SaveGameWithFileName()
 {
+=======
+bool isFileNameDuplicate(const string& fileName, const vector<string>& existingFiles) {
+	for (const auto& file : existingFiles) {
+		if (fileName == file) {
+			return true;
+		}
+	}
+	return false;
+}
+void SaveGameWithFileName() {
+>>>>>>> 1f34508c104f7a0d99a6b75c14496dc04f1b55a3
 	// Đếm số lượng file .txt trong thư mục Saves
 	system("dir /b Saves\\*.txt > file_count.txt");  // Lưu danh sách file vào file_count.txt
 	ifstream countFile("file_count.txt");
-	int fileCount = 0;
+	vector<string> existingFiles;
 	string temp;
 	while (getline(countFile, temp)) {
-		fileCount++;
+		existingFiles.push_back(temp);
 	}
 	countFile.close();
 	remove("file_count.txt");  // Xóa file tạm sau khi sử dụng
 
 	// Kiểm tra nếu số lượng file đạt giới hạn 8
-	if (fileCount >= 9) {
+	if (existingFiles.size() >= 9) {
 		error();
 		int countError = 3;
 		do {
-			Box_Error_MaxSave();//hien thi loi toi da file
+			Box_Error_MaxSave(); // Hiển thị lỗi quá số lượng file
 			Sleep(500);
-			GotoXY(42, 9);std::cout << "                                                          ";
+			GotoXY(42, 9);
+			std::cout << "                                                          ";
 			Sleep(500);
 
 			countError--;
 		} while (countError > 0);
+<<<<<<< HEAD
+=======
+		Box_Error_MaxSave();
+>>>>>>> 1f34508c104f7a0d99a6b75c14496dc04f1b55a3
 		char key = _getch();
 
 		if (key == 'k') {
 			xoagame();
+<<<<<<< HEAD
 
 
 		}
 
+=======
+		}
+>>>>>>> 1f34508c104f7a0d99a6b75c14496dc04f1b55a3
 		RecoveryBoard();
 		int countX, countO;
 		countXO(countX, countO);
@@ -102,7 +123,7 @@ void SaveGameWithFileName()
 	Box6();
 
 	bool validInput = true;
-	while (validInput) {//chan kh cho nhap tran ra khoi khung
+	while (validInput) { // Chặn nhập vượt quá giới hạn và trùng tên
 		fileName = getInputWithEscCheck_Save();
 		if (fileName.length() > 8) {
 			error();
@@ -110,7 +131,7 @@ void SaveGameWithFileName()
 			GotoXY(LEFT, TOP + 2 * BOARD_SIZE + 3);
 			int countError = 3;
 			do {
-				Box_Error_Name();//hien thi loi toi da file
+				Box_Error_Name(); // Hiển thị lỗi quá dài
 				Sleep(500);
 				GotoXY(41, 13);
 				cout << "                                        ";
@@ -122,13 +143,33 @@ void SaveGameWithFileName()
 			RecoveryBoard();
 			Box6();
 			GotoXY(58, 9);
-			cout << "                                  ";//che ten cu
+			cout << "                                  "; // Che tên cũ
 			GotoXY(58, 9);
 		}
-		else validInput = false;
+		else if (isFileNameDuplicate(fileName + ".txt", existingFiles)) {
+			error();
+			int countError = 3;
+			do {
+				Box_Error_Duplicate_file();
+				Sleep(500);
+				GotoXY(41, 13);
+				cout << "                                        ";
+				Sleep(200);
+				countError--;
+			} while (countError > 0);
+			RecoveryBoard();
+			Box6();
+			GotoXY(58, 9); // Xóa tên cũ
+			cout << "                                  ";
+			GotoXY(58, 9);
+		}
+		else {
+			validInput = false;
+		}
 	}
-	if (fileName != "") {
-		fileName += ".txt";  // Thêm phần mở rộng cho file
+
+	if (!fileName.empty()) {
+		fileName += ".txt"; // Thêm phần mở rộng cho file
 
 		// Thêm đường dẫn vào thư mục "Saves"
 		string filePath = "Saves/" + fileName;
@@ -145,18 +186,17 @@ void SaveGameWithFileName()
 		// Lưu trạng thái bàn cờ
 		for (int i = 0; i < BOARD_SIZE; i++) {
 			for (int j = 0; j < BOARD_SIZE; j++) {
-				saveFile << _A[i][j].c << " ";  // Lưu giá trị của từng ô cờ
+				saveFile << _A[i][j].c << " "; // Lưu giá trị của từng ô cờ
 			}
 			saveFile << endl;
 		}
-
 
 		// Lưu lượt chơi hiện tại
 		saveFile << (_TURN ? 1 : 0) << endl;
 
 		// Lưu vị trí con trỏ hiện tại
 		saveFile << _X << " " << _Y << endl;
-		saveFile << scoreP1 << " " << scoreP2 << endl;  // Lưu điểm số của người chơi 1 và 2
+		saveFile << scoreP1 << " " << scoreP2 << endl; // Lưu điểm số của người chơi 1 và 2
 		saveFile.close();
 
 		Box_Save_Complete();
@@ -412,7 +452,7 @@ void restartGame() {
 	else DrawO(89 + 2, 17);
 	while (1) {
 		_COMMAND = toupper(_getch());
-		if (_COMMAND == 27) { // Nếu người chơi bấm Esc
+		if (_COMMAND == 27 || _COMMAND == 'q' || _COMMAND == 'Q') { // Nếu người chơi bấm Esc
 			Sleep(500);
 			//system("pause");
 			Sleep(500);scoreP1 = 0;
@@ -610,22 +650,29 @@ void resetData() {
 //final
 void showloadgame()
 {
-
 	clearScreen();
 	SetConsoleOutputCP(CP_UTF8);
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	while (true) {
+		// Xóa màn hình và đặt màu sắc cho phần nền
 		clearScreen();
+		DrawBG_Tim();
+		drawLoadGame(20, 1);
 		SetConsoleTextAttribute(hConsole, FOREGROUND_RED | BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED);
-		clearScreen();
 
+<<<<<<< HEAD
 		DrawBG_Tim();
 		drawLoadGame(20, 1);
 		GotoXY(0, 16);
 		cout << u8"                               ┌────────────────────────────────────────────┐" << "\n";
 		cout << u8"                               │            DANH SACH FILE SAVE             │" << "\n";
 		cout << u8"                               │                                            │" << "\n";
+=======
+		GotoXY(40, 12); cout << u8"┌────────────────────────────────────────────┐" << "\n";
+		GotoXY(40, 13); cout << u8"│            DANH SACH FILE SAVE             │" << "\n";
+		GotoXY(40, 14); cout << u8"│                                            │" << "\n";
+>>>>>>> 1f34508c104f7a0d99a6b75c14496dc04f1b55a3
 
 		vector<string> savedFiles;
 		showSavedFiles(savedFiles);
@@ -633,11 +680,22 @@ void showloadgame()
 		int selectedFileIndex = 0;
 		int selectingFile = 0;
 
+		// Số lượng tối đa của file trong bảng
+		const int maxFiles = 8;
+		// Chỉ số dòng bắt đầu cho các file
+		int fileStartRow = 15;
+
 		while (true) {
-			// Xóa màn hình chỉ khi người dùng di chuyển
+			// Xóa màn hình nếu người dùng di chuyển
 			if (selectingFile) {
 				clearScreen();
+				// Vẽ lại nền mỗi lần sau khi người dùng di chuyển lựa chọn
+				DrawBG_Tim();
+				drawLoadGame(20, 1);
+				SetConsoleTextAttribute(hConsole, FOREGROUND_RED | BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED);
+
 			}
+<<<<<<< HEAD
 			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 			SetConsoleTextAttribute(hConsole, FOREGROUND_RED | (15 << 4));
@@ -652,23 +710,40 @@ void showloadgame()
 			// Hiển thị tên file trong bảng và đánh dấu tệp đang chọn
 			for (size_t i = 0; i < savedFiles.size(); i++) {
 				string formattedFileName = savedFiles[i];
+=======
+			GotoXY(40, 12); cout << u8"┌────────────────────────────────────────────┐" << "\n";
+			GotoXY(40, 13); cout << u8"│            DANH SACH FILE SAVE             │" << "\n";
+			GotoXY(40, 14); cout << u8"│                                            │" << "\n";
+			// Vẽ bảng file và danh sách các file
+			for (int i = 0; i < maxFiles; i++) {
+				// Đảm bảo không vẽ quá số lượng file có sẵn
+				string formattedFileName = (i < savedFiles.size()) ? savedFiles[i] : "";
+>>>>>>> 1f34508c104f7a0d99a6b75c14496dc04f1b55a3
 				if (formattedFileName.length() > 40) {
 					formattedFileName = formattedFileName.substr(0, 37) + "...";
 				}
-				if (i == selectedFileIndex && selectingFile) {
-					cout << u8"                               │ > " << formattedFileName
+
+				// Đánh dấu file đang chọn
+				if (i == selectedFileIndex) {
+					GotoXY(40, fileStartRow + i);
+					cout << u8"│ > " << formattedFileName
 						<< std::string(38 - formattedFileName.length(), ' ') << u8"   │" << "\n";
 				}
 				else {
-					cout << u8"                               │   " << formattedFileName
+					GotoXY(40, fileStartRow + i);
+					cout << u8"│   " << formattedFileName
 						<< std::string(40 - formattedFileName.length(), ' ') << u8" │" << "\n";
 				}
 			}
 
-			cout << u8"                               └────────────────────────────────────────────┘" << "\n";
-			cout << "                           Ban co muon Load File khong? (Y/N) hoac xoa file? (D) ";
+			// Hiển thị bảng đóng lại
+			GotoXY(40, fileStartRow + maxFiles);
+			cout << u8"└────────────────────────────────────────────┘" << "\n";
+			GotoXY(36, fileStartRow + maxFiles + 1);
+			cout << "Ban co muon Load File khong? (Y/N) hoac xoa file? (D) ";
 			char choice = _getch();
 
+			// Xử lý lựa chọn của người dùng
 			if (choice == 'n' || choice == 'N') {
 				click();
 				return;
@@ -677,13 +752,25 @@ void showloadgame()
 				click();
 				return;
 			}
-			else if (choice == 'd' || choice == 'D')
-			{
+			else if (choice == 'd' || choice == 'D') {
 				click();
-				selectingFile = -1;
+				if (savedFiles.empty()) {
+					int countError = 3;
+					error();
+					do {
+						Box_Error_Empty_File();
+						Sleep(500);
+						GotoXY(50, 17); cout << "                      ";
+						Sleep(200);
+						countError--;
+					} while (countError > 0);
+					selectingFile = 0;
+				}
+				else {
+					selectingFile = -1;
+				}
 			}
-			else if (selectingFile == -1)
-			{
+			else if (selectingFile == -1) {
 				if (choice == 'w' || choice == 'W') {
 					click();
 					if (selectedFileIndex > 0) selectedFileIndex--; // Di chuyển lên
@@ -693,24 +780,37 @@ void showloadgame()
 					if (selectedFileIndex < savedFiles.size() - 1) selectedFileIndex++; // Di chuyển xuống
 				}
 				else if (choice == '\r') {
-
+					// Xóa file khi nhấn Enter
 					string fileName = savedFiles[selectedFileIndex];
 					deleteSavedFile(fileName);
 					savedFiles.clear();
 					showSavedFiles(savedFiles);
 					selectedFileIndex = 0;
 					selectingFile = 0;
-
 				}
 			}
-
 			else if (choice == 'y' || choice == 'Y')
 			{
 				click();
-				selectingFile = 1;
+				if (savedFiles.empty())
+				{
+					int countError = 3;
+					error();
+					do {
+						Box_Error_Empty_File();
+						Sleep(500);
+						GotoXY(50, 17); cout << "                      ";
+						Sleep(200);
+						countError--;
+					} while (countError > 0);
+					selectingFile = 0;
+				}
+				else {
+					selectingFile = 1;
+				}
 			}
-			else if (selectingFile == 1)
-			{
+
+			else if (selectingFile == 1) {
 				if (choice == 'w' || choice == 'W') {
 					click();
 					if (selectedFileIndex > 0) selectedFileIndex--; // Di chuyển lên
@@ -721,7 +821,6 @@ void showloadgame()
 				}
 				else if (choice == '\r') { // Enter để load tệp
 					click();
-					click();
 					string fileName = savedFiles[selectedFileIndex];
 					string fullFileName = "Saves/" + fileName + ".txt";
 
@@ -731,6 +830,7 @@ void showloadgame()
 					else {
 						fullFileName = "Saves/" + fileName + ".txt"; // Nếu chưa có thì thêm ".txt"
 					}
+
 					ifstream loadFile(fullFileName.c_str());
 					cout << "duong dan file load: " << fullFileName << endl;
 
@@ -765,18 +865,12 @@ void showloadgame()
 					GotoXY(_X, _Y);
 					cout << "Game da duoc load thanh cong tu file: " << fullFileName << endl;
 					break;
-
-
 				}
 			}
-
-
-
-
-
 		}
 	}
 }
+
 void LoadGameWithFileName() {
 	clearScreen();  // Xóa màn hình trước khi tải game
 	showloadgame();  // Hiện danh sách các file save
@@ -785,12 +879,9 @@ void LoadGameWithFileName() {
 
 void deleteSavedFile(const string& fileName) {
 	string filePath = "Saves/" + fileName; // Tạo đường dẫn đầy đủ đến tệp
-	cout << "Dang xoa tep: " << filePath << endl; // In ra đường dẫn để kiểm tra
+	
 	if (remove(filePath.c_str()) != 0) {
 		perror("Loi khi xoa tep"); // Thông báo lỗi nếu không xóa được
-	}
-	else {
-		cout << "Tep da xoa thanh cong: " << filePath << endl;
 	}
 }
 void xoagame()
@@ -802,12 +893,11 @@ void xoagame()
 	while (true)
 	{
 		clearScreen();
+		DrawBG_Tim();
 		SetConsoleTextAttribute(hConsole, FOREGROUND_RED | BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED);
-		clearScreen();
-
-		cout << u8"                               ┌────────────────────────────────────────────┐" << "\n";
-		cout << u8"                               │            DANH SACH FILE SAVE             │" << "\n";
-		cout << u8"                               │                                            │" << "\n";
+		GotoXY(40, 12); cout << u8"┌────────────────────────────────────────────┐" << "\n";
+		GotoXY(40, 13); cout << u8"│            DANH SACH FILE SAVE             │" << "\n";
+		GotoXY(40, 14); cout << u8"│                                            │" << "\n";
 
 		vector<string> savedFiles;
 		showSavedFiles(savedFiles);
@@ -815,40 +905,49 @@ void xoagame()
 		int selectedFileIndex = 0;
 		int selectingFile = 0;
 
-		while (true)
-		{
-			// Xóa màn hình chỉ khi người dùng di chuyển
-			if (selectingFile)
-			{
+		// Số lượng tối đa của file trong bảng
+		const int maxFiles = 8;
+		// Chỉ số dòng bắt đầu cho các file
+		int fileStartRow = 15;
+
+		while (true) {
+			// Xóa màn hình nếu người dùng di chuyển
+			if (selectingFile) {
 				clearScreen();
+				// Vẽ lại nền mỗi lần sau khi người dùng di chuyển lựa chọn
+				DrawBG_Tim();
+				SetConsoleTextAttribute(hConsole, FOREGROUND_RED | BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED);
+
 			}
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-
-			SetConsoleTextAttribute(hConsole, FOREGROUND_RED | (15 << 4));
-			clearScreen();
-
-			cout << u8"                               ┌────────────────────────────────────────────┐" << "\n";
-			cout << u8"                               │            DANH SACH FILE SAVE             │" << "\n";
-			cout << u8"                               │                                            │" << "\n";
-			// Hiển thị tên file trong bảng và đánh dấu tệp đang chọn
-			for (size_t i = 0; i < savedFiles.size(); i++)
-			{
-				string formattedFileName = savedFiles[i];
+			GotoXY(40, 12); cout << u8"┌────────────────────────────────────────────┐" << "\n";
+			GotoXY(40, 13); cout << u8"│            DANH SACH FILE SAVE             │" << "\n";
+			GotoXY(40, 14); cout << u8"│                                            │" << "\n";
+			// Vẽ bảng file và danh sách các file
+			for (int i = 0; i < maxFiles; i++) {
+				// Đảm bảo không vẽ quá số lượng file có sẵn
+				string formattedFileName = (i < savedFiles.size()) ? savedFiles[i] : "";
 				if (formattedFileName.length() > 40) {
 					formattedFileName = formattedFileName.substr(0, 37) + "...";
 				}
-				if (i == selectedFileIndex && selectingFile) {
-					cout << u8"                               │ > " << formattedFileName
+
+				// Đánh dấu file đang chọn
+				if (i == selectedFileIndex) {
+					GotoXY(40, fileStartRow + i);
+					cout << u8"│ > " << formattedFileName
 						<< std::string(38 - formattedFileName.length(), ' ') << u8"   │" << "\n";
 				}
 				else {
-					cout << u8"                               │   " << formattedFileName
+					GotoXY(40, fileStartRow + i);
+					cout << u8"│   " << formattedFileName
 						<< std::string(40 - formattedFileName.length(), ' ') << u8" │" << "\n";
 				}
 			}
 
-			cout << u8"                               └────────────────────────────────────────────┘" << "\n";
-			cout << "                                 Ban co muon xoa File khong? (D) ";
+			// Hiển thị bảng đóng lại
+			GotoXY(40, fileStartRow + maxFiles);
+			cout << u8"└────────────────────────────────────────────┘" << "\n";
+			GotoXY(46, fileStartRow + maxFiles + 1);
+			cout << "Ban co muon xoa File khong? (D) ";
 			char choice = _getch();
 
 			if (choice == 'n' || choice == 'N') {
@@ -859,11 +958,25 @@ void xoagame()
 				click();
 				return;
 			}
-			else if (choice == 'd' || choice == 'D')
-			{
+			else if (choice == 'd' || choice == 'D') {
 				click();
-				selectingFile = -1;
+				if (savedFiles.empty()) {
+					int countError = 3;
+					error();
+					do {
+						Box_Error_Empty_File();
+						Sleep(500);
+						GotoXY(50, 17); cout << "                      ";
+						Sleep(200);
+						countError--;
+					} while (countError > 0);
+					selectingFile = 0;
+				}
+				else {
+					selectingFile = -1;
+				}
 			}
+
 			else if (selectingFile == -1)
 			{
 				if (choice == 'w' || choice == 'W') {

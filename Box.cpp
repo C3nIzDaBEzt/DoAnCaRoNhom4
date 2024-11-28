@@ -171,7 +171,9 @@ void Box_Error_MaxSave() {
 	cout << u8R"(║ Save limit reached. You cannot create any more save files!  ║)";
 	GotoXY(40, 10);
 	cout << u8R"(╚═════════════════════════════════════════════════════════════╝)";
+	GotoXY(55, 11);SetColor(4, 14);cout << "--Press (K) to delete file--";SetColor(0, 15);
 }
+
 
 void Box6() {
 	SetColor(0, 15);
@@ -234,6 +236,26 @@ void Box_TimeCountdown_End() {
 	GotoXY(40, 16);
 	cout << u8R"(║              TIME IS UP!!!!!            ║)";
 	GotoXY(40, 17);
+	cout << u8R"(╚═════════════════════════════════════════╝)";
+	SetColor(0, 15);
+}
+void Box_Error_Empty_File() {
+	SetColor(4, 15);
+	GotoXY(41, 16);
+	cout << u8R"(╔═════════════════════════════════════════╗)";
+	GotoXY(41, 17);
+	cout << u8R"(║              FILE NOT FOUND             ║)";
+	GotoXY(41, 18);
+	cout << u8R"(╚═════════════════════════════════════════╝)";
+	SetColor(0, 15);
+}
+void Box_Error_Duplicate_file() {
+	SetColor(4, 15);
+	GotoXY(40, 12);
+	cout << u8R"(╔═════════════════════════════════════════╗)";
+	GotoXY(40, 13);
+	cout << u8R"(║         FILE NAME ALREADY EXISTS        ║)";
+	GotoXY(40, 14);
 	cout << u8R"(╚═════════════════════════════════════════╝)";
 	SetColor(0, 15);
 }
