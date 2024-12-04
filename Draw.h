@@ -27,7 +27,7 @@ void drawSetting(int x, int y);
 void DrawBg_Xanh();
 void DrawBg_Cam();
 void DrawBg_Hong();
-void drawName(int, int);
+void drawName(int x, int y);
 
 
 #endif ;
