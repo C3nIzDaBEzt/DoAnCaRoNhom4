@@ -1,4 +1,4 @@
-﻿
+
 #include "Save.h"
 #include "language.h"
 #include <Windows.h>
@@ -718,10 +718,10 @@ void showloadgame()
 				drawLoadGame(20, 1);
 				SetConsoleTextAttribute(hConsole, (15 << 4) | 11);
 			}*/
-			SetConsoleTextAttribute(hConsole, (15 << 4) | 13);
+			SetConsoleTextAttribute(hConsole, (15 << 4) | 3);
 			GotoXY(42, 12); cout << u8"██████████████████████████████████████████" << "\n";
 			GotoXY(40, 13);
-			SetConsoleTextAttribute(hConsole, (13 << 4) | 0);
+			SetConsoleTextAttribute(hConsole, (3 << 4) | 0);
 			if (isEnglish)
 				cout << u8"                SAVED FILE LIST               " << "\n";
 			else
@@ -738,13 +738,13 @@ void showloadgame()
 				// Đánh dấu file đang chọn
 				if (i == selectedFileIndex) {
 					GotoXY(40, fileStartRow + i);
-					SetConsoleTextAttribute(hConsole, (13 << 4) | 7);
+					SetConsoleTextAttribute(hConsole, (3 << 4) | 7);
 					cout << u8"  > " << formattedFileName
 						<< std::string(38 - formattedFileName.length(), ' ') << u8"    " << "\n";
 				}
 				else {
 					GotoXY(40, fileStartRow + i);
-					SetConsoleTextAttribute(hConsole, (13 << 4) | 0);
+					SetConsoleTextAttribute(hConsole, (3 << 4) | 0);
 					cout << u8"    " << formattedFileName
 						<< std::string(40 - formattedFileName.length(), ' ') << u8"  " << "\n";
 				}
@@ -760,33 +760,33 @@ void showloadgame()
 
 			if (selectingFile == 1) {
 				// Load file: tô trắng
-				SetConsoleTextAttribute(hConsole, (13 << 4) | 7);
+				SetConsoleTextAttribute(hConsole, (3 << 4) | 7);
 				GotoXY(40, fileStartRow + maxFiles);
 				cout << (isEnglish ? "       Do you want to Load file? (Y)          "
 					: "      Ban co muon Load file khong? (Y)        ");
 
 				// Delete file: màu mặc định
-				SetConsoleTextAttribute(hConsole, (13 << 4) | 0);
+				SetConsoleTextAttribute(hConsole, (3 << 4) | 0);
 				GotoXY(40, fileStartRow + maxFiles + 1);
 				cout << (isEnglish ? "                or Delete file ? (D)          "
 					: "                   hoac Xoa file ? (D)        ");
 			}
 			else if (selectingFile == -1) {
 				// Load file: màu mặc định
-				SetConsoleTextAttribute(hConsole, (13 << 4) | 0);
+				SetConsoleTextAttribute(hConsole, (3 << 4) | 0);
 				GotoXY(40, fileStartRow + maxFiles);
 				cout << (isEnglish ? "       Do you want to Load file? (Y)          "
 					: "      Ban co muon Load file khong? (Y)        ");
 
 				// Delete file: tô trắng
-				SetConsoleTextAttribute(hConsole, (13 << 4) | 7);
+				SetConsoleTextAttribute(hConsole, (3 << 4) | 7);
 				GotoXY(40, fileStartRow + maxFiles + 1);
 				cout << (isEnglish ? "                or Delete file ? (D)          "
 					: "                   hoac Xoa file ? (D)        ");
 			}
 			else {
 				// Cả hai dòng đều màu mặc định
-				SetConsoleTextAttribute(hConsole, (13 << 4) | 0);
+				SetConsoleTextAttribute(hConsole, (3 << 4) | 0);
 				GotoXY(40, fileStartRow + maxFiles);
 				cout << (isEnglish ? "       Do you want to Load file? (Y)          "
 					: "      Ban co muon Load file khong? (Y)        ");
@@ -797,7 +797,7 @@ void showloadgame()
 
 			//SetConsoleTextAttribute(hConsole, (13 << 4) | 7);
 			GotoXY(42, fileStartRow + maxFiles + 2);
-			SetConsoleTextAttribute(hConsole, (15 << 4) | 13);
+			SetConsoleTextAttribute(hConsole, (15 << 4) | 3);
 			cout << u8"██████████████████████████████████████████" << "\n";
 			char choice = _getch();
 
